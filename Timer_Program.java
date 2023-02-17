@@ -127,8 +127,6 @@ public class Timer_Program{
           e1.printStackTrace();
         }
 
-
-
     }});
 
     // Show the GUI
