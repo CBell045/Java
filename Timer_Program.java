@@ -7,11 +7,10 @@
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -31,6 +30,9 @@ public class Timer_Program{
 
   // Keep track of the start time of the timer
   private static long startTime;
+  private static String formattedElapsedTime;
+  private static String amount;
+
 
   public static void main(String[] args) {
     
@@ -51,8 +53,8 @@ public class Timer_Program{
     // Add the start button to the bottom of the panel
     f.getContentPane().add(BorderLayout.SOUTH, stopButton);
     // Add the company name text field
-    JTextField textField = new JTextField("Add company name here", 40);
-    f.getContentPane().add(BorderLayout.NORTH, textField);
+    JTextField companyName = new JTextField("Add company name here", 40);
+    f.getContentPane().add(BorderLayout.NORTH, companyName);
 
 
     // Timer to refresh the screen every second
@@ -68,7 +70,7 @@ public class Timer_Program{
           // Subtract the minutes from the seconds
           long seconds = TimeUnit.MILLISECONDS.toSeconds(elapsedTime) % 60;
         
-          String formattedElapsedTime = String.format("%d hr, %d min, %d sec", 
+          formattedElapsedTime = String.format("%d hr, %d min, %d sec", 
             hours,
             minutes,
             seconds
@@ -78,13 +80,14 @@ public class Timer_Program{
 
         // Set decimal format
         DecimalFormat dec = new DecimalFormat("###.##");
+        amount = dec.format(elapsedTime* 20.0/1000.0/60.0/60.0);
         // Show the timer, rate, and invoice details
         textArea.setText("Timer:\n" + 
                         formattedElapsedTime + "\n" +
                         "Rate:\n" + 
                         "$20/hr\n" +
                         "Invoice:\n" + 
-                        "$" + dec.format(elapsedTime* 20.0/1000.0/60.0/60.0));
+                        "$" + amount);
         }
     });
 
@@ -106,12 +109,24 @@ public class Timer_Program{
         System.out.print("Stop Time ");
         System.out.println(new SimpleDateFormat("hh:mm:ss").format(System.currentTimeMillis()));
         timer.stop();
-        Path filePath = Paths.get("invoice.txt");
+
+        // Write to a text file
+        PrintWriter writer;
         try {
-          Files.writeString(filePath, "Hello World !!", StandardOpenOption.APPEND);
-        } catch (IOException e1) {
+          writer = new PrintWriter("invoice.txt", "UTF-8");
+          writer.print("Company Name: ");
+          writer.println(companyName.getText());
+          writer.print("Hours: ");
+          writer.println(formattedElapsedTime);
+          writer.print("Invoice Amount: ");
+          writer.println(amount);
+          writer.close();
+        } catch (FileNotFoundException e1) {
+          e1.printStackTrace();
+        } catch (UnsupportedEncodingException e1) {
           e1.printStackTrace();
         }
+
 
 
     }});
@@ -126,6 +141,7 @@ public class Timer_Program{
 // Beginning Code:
 // https://stackoverflow.com/questions/5118701/how-to-create-a-gui-in-java
 // https://stackoverflow.com/questions/10820033/make-a-simple-timer-in-java
+// https://stackoverflow.com/questions/2885173/how-do-i-create-a-file-and-write-to-it
 
 // TODO
 // Export results to text

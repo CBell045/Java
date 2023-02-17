@@ -1,0 +1,3 @@
+Company Name: Add company name here
+Hours: 0 hr, 0 min, 4 sec
+Invoice Amount: 0.02
