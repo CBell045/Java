@@ -7,6 +7,12 @@
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +22,9 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+
+
+
 
 // Timer Program Class
 public class Timer_Program{
@@ -34,9 +43,13 @@ public class Timer_Program{
     JTextArea textArea = new JTextArea(10, 40);
     f.getContentPane().add(BorderLayout.CENTER, textArea);
     // The start timer button
-    JButton button = new JButton("Start Timer");
+    JButton startButton = new JButton("Start Timer");
     // Add the start button to the bottom of the panel
-    f.getContentPane().add(BorderLayout.SOUTH, button);
+    f.getContentPane().add(BorderLayout.AFTER_LINE_ENDS, startButton);
+    // The stop timer button
+    JButton stopButton = new JButton("Stop Timer");
+    // Add the start button to the bottom of the panel
+    f.getContentPane().add(BorderLayout.SOUTH, stopButton);
     // Add the company name text field
     JTextField textField = new JTextField("Add company name here", 40);
     f.getContentPane().add(BorderLayout.NORTH, textField);
@@ -76,7 +89,7 @@ public class Timer_Program{
     });
 
     // Start timer button
-    button.addActionListener(new ActionListener() {
+    startButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         Timer_Program.startTime = System.currentTimeMillis();
@@ -84,6 +97,23 @@ public class Timer_Program{
         System.out.print("Start Time ");
         System.out.println(new SimpleDateFormat("hh:mm:ss").format(System.currentTimeMillis()));
         timer.start();
+    }});
+
+    stopButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        // Print out details for error tracking
+        System.out.print("Stop Time ");
+        System.out.println(new SimpleDateFormat("hh:mm:ss").format(System.currentTimeMillis()));
+        timer.stop();
+        Path filePath = Paths.get("invoice.txt");
+        try {
+          Files.writeString(filePath, "Hello World !!", StandardOpenOption.APPEND);
+        } catch (IOException e1) {
+          e1.printStackTrace();
+        }
+
+
     }});
 
     // Show the GUI
@@ -97,8 +127,7 @@ public class Timer_Program{
 // https://stackoverflow.com/questions/5118701/how-to-create-a-gui-in-java
 // https://stackoverflow.com/questions/10820033/make-a-simple-timer-in-java
 
-// todo
-// Add price and billing
-// Export results to pdf
+// TODO
+// Export results to text
 // Add multiple timers
 // Add pause feature
