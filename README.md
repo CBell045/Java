@@ -6,7 +6,7 @@ I wrote this code using Java and many of its libraries.
 
 I have recently started doing some consulting work for different clients, and I need a better way to track my time as I code in RStudio. There were no satisfactory coding timers for RStudio, so I decided to create my own. 
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/fbdkrzlBxkU)
 
 # Development Environment
 
